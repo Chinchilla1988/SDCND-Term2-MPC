@@ -2,6 +2,85 @@
 Self-Driving Car Engineer Nanodegree Program
 
 ---
+## State variables
+
+The process model consists of six states: x- and y-position, yaw-angle, velocity, cross-track-error and orientation-error epsi.
+px: current location in x-axis global coordinates
+py: current location in y-axis global coordinates
+psi / yaw-angle: car orientation
+velocity: 
+cross-track-error / cte: the rectangular distance between longitudinal car position / orientation and the desired trackline.
+orientation-error: error between desired orientation and actual orientation
+
+
+
+## Actuators: Steering and throttle
+
+delta: describes the steering angle value between [-1,1]. It's constrained between [-25,25] degrees.
+throttle: describes the throttle value between [-1,1]. -1 is for full braking, +1 for full acceleration.
+
+## Process model
+All state variables future steps can be calculated by the actual state variables and actuations just as described in image 1:
+
+![Undistorted images](text/process.png?raw=true)
+
+## Timestep Length and Elapsed Duration (N & dt)
+Dt was set to a constant with a factor of 0.1 -> dt=0.1 . Dt is modeled as latency in this algorithm. The timestep length N was chosen as 10. Values above 10 resulted in an instable MPC. Values below 10 were too short to drive properly through curves.
+
+## Polynomial Fitting and MPC Preprocessing
+
+To calculate the desired waypoints correctly I added to the state variable a latency "dt" of 0.1 seconds, based on the system dynamics.
+
+```
+          px += v * cos(psi) * dt;
+          py += v * sin(psi) * dt;
+          psi -= v * delta / Lf * dt;
+          v += acceleration * dt;
+```
+
+The given waypoints are described according to the global coordinate system. In order to estimate the desired trajectory correctly the given values have to be transformed into the local vehicle coordinate system.
+
+```
+        for (int i=0; i<ptsx.size(); i++) {
+
+            double shift_x = ptsx[i] - px;
+            double shift_y = ptsy[i] - py;
+
+            ptsx[i] = shift_x * cos(0-psi) - shift_y * sin(0-psi);
+            ptsy[i] = shift_y * cos(0-psi) + shift_x * sin(0-psi);
+
+             }
+```
+
+To connect the waypoints I decided to fit them by a cubic function, calulated the cte and epsi:
+```
+          auto coeffs = polyfit(ptsx_transform, ptsy_transform, 3);
+          double cte = polyeval(coeffs, 0.0); // y=0
+          double epsi = psi - atan(coeffs[1] + 2 * px * coeffs[2] + 3 * coeffs[3] *pow(px,2));// x=0
+```
+
+Last but not least I updated the state variables and fed them to my MPC:
+
+```
+          const double px_act = v * dt;
+          const double py_act = 0;
+          const double psi_act = v * (-delta) * dt / Lf;
+          const double v_act = v + acceleration * dt;
+          const double cte_act = cte + v * sin(epsi) * dt;
+          const double epsi_act = epsi + psi_act;
+
+
+
+
+          // state in car coordniates
+          Eigen::VectorXd state(6);
+          //state << px_act,py_act,psi_act, v_act, cte_act, epsi_act;
+          state << px_act,py_act,psi_act, v_act, cte_act, epsi_act;
+
+
+          auto vars = mpc.Solve(state, coeffs);
+```
+
 
 ## Dependencies
 
