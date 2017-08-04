@@ -4,20 +4,20 @@ Self-Driving Car Engineer Nanodegree Program
 ---
 ## State variables
 
-The process model consists of six states: x- and y-position, yaw-angle, velocity, cross-track-error and orientation-error epsi.
-px: current location in x-axis global coordinates
-py: current location in y-axis global coordinates
-psi / yaw-angle: car orientation
-velocity: 
-cross-track-error / cte: the rectangular distance between longitudinal car position / orientation and the desired trackline.
-orientation-error: error between desired orientation and actual orientation
+The process model consists of six states: x- and y-position, yaw-angle, velocity, cross-track-error and orientation-error epsi.__
+px: current location in x-axis global coordinates__
+py: current location in y-axis global coordinates__
+psi / yaw-angle: car orientation__
+velocity: describes the car's velocity__
+cross-track-error / cte: the rectangular distance between longitudinal car position / orientation and the desired trackline.__
+orientation-error: error between desired orientation and actual orientation.__
 
 
 
 ## Actuators: Steering and throttle
 
-delta: describes the steering angle value between [-1,1]. It's constrained between [-25,25] degrees.
-throttle: describes the throttle value between [-1,1]. -1 is for full braking, +1 for full acceleration.
+delta: describes the steering angle value between [-1,1]. It's constrained between [-25,25] degrees.__
+throttle: describes the throttle value between [-1,1]. -1 is for full braking, +1 for full acceleration.__
 
 ## Process model
 All state variables future steps can be calculated by the actual state variables and actuations just as described in image 1:
