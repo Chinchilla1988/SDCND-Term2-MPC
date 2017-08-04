@@ -5,7 +5,7 @@ Self-Driving Car Engineer Nanodegree Program
 ## State variables
 
 The process model consists of six states: x- and y-position, yaw-angle, velocity, cross-track-error and orientation-error epsi.__
-px: current location in x-axis global coordinates__
+px: current location in x-axis global coordinates
 py: current location in y-axis global coordinates__
 psi / yaw-angle: car orientation__
 velocity: describes the car's velocity__
