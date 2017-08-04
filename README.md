@@ -16,8 +16,8 @@ orientation-error: error between desired orientation and actual orientation.<br 
 
 ## Actuators: Steering and throttle
 
-delta: describes the steering angle value between [-1,1]. It's constrained between [-25,25] degrees.__
-throttle: describes the throttle value between [-1,1]. -1 is for full braking, +1 for full acceleration.__
+delta: describes the steering angle value between [-1,1]. It's constrained between [-25,25] degrees.<br />
+throttle: describes the throttle value between [-1,1]. -1 is for full braking, +1 for full acceleration.<br />
 
 ## Process model
 All state variables future steps can be calculated by the actual state variables and actuations just as described in image 1:
