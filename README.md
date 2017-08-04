@@ -22,7 +22,7 @@ throttle: describes the throttle value between [-1,1]. -1 is for full braking, +
 ## Process model
 All state variables future steps can be calculated by the actual state variables and actuations just as described in image 1:
 
-![Undistorted images](text/process.png?raw=true)
+![process](text/process.png?raw=true)
 
 ## Timestep Length and Elapsed Duration (N & dt)
 Dt was set to a constant with a factor of 0.1 -> dt=0.1 . Dt is modeled as latency in this algorithm. The timestep length N was chosen as 10. Values above 10 resulted in an instable MPC. Values below 10 were too short to drive properly through curves.
