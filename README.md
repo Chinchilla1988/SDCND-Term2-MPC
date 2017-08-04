@@ -2,6 +2,9 @@
 Self-Driving Car Engineer Nanodegree Program
 
 ---
+## Video
+https://www.youtube.com/watch?v=JRocnan_-5E&feature=youtu.be
+
 ## State variables
 
 The process model consists of six states: x- and y-position, yaw-angle, velocity, cross-track-error and orientation-error epsi.<br />
