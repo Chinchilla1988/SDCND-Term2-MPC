@@ -5,9 +5,9 @@
 
 using CppAD::AD;
 
-  const double dt=0.05;
+  const double dt=0.15;
   const double Lf=2.67;
-  const size_t N = 16;
+  const size_t N = 10;
 
 
 
@@ -46,21 +46,22 @@ class FG_eval {
     fg[0] = 0;
 
     for (int i = 0; i < N; i++) {
-      fg[0] += 10*CppAD::pow(vars[cte_start + i] - ref_cte, 2);
-      fg[0] += 10*CppAD::pow(vars[epsi_start + i] - ref_epsi, 2);
-      fg[0] += CppAD::pow(vars[v_start + i] - ref_v, 2);
+      fg[0] += 1850*CppAD::pow(vars[cte_start + i] - ref_cte, 2);
+      fg[0] += 1850*CppAD::pow(vars[epsi_start + i] - ref_epsi, 2);
+      fg[0] += 1*CppAD::pow(vars[v_start + i] - ref_v, 2);
     }
 
     // minimize the actuator values
     for (int i = 0; i < N - 1; i++) {
-      fg[0] += 30*CppAD::pow(vars[delta_start + i], 2);
-      fg[0] += 50*CppAD::pow(vars[a_start + i], 2);
+            //8050
+      fg[0] += 250*CppAD::pow(vars[delta_start + i], 2);
+      fg[0] += 1*CppAD::pow(vars[a_start + i], 2);
     }
 
     // minimize the sudden change
     for (int i = 0; i < N - 2; i++) {
-      fg[0] += 600*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
-      fg[0] += 40*CppAD::pow(vars[a_start + i +1] - vars[a_start + i], 2);
+      fg[0] += 50*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
+      fg[0] += CppAD::pow(vars[a_start + i +1] - vars[a_start + i], 2);
     }
 
 
@@ -175,8 +176,8 @@ vector<double> MPC::Solve(Eigen::VectorXd x0, Eigen::VectorXd coeffs) {
   // degrees (values in radians).
   // NOTE: Feel free to change this to something else.
   for (int i = delta_start; i < a_start; i++) {
-    vars_lowerbound[i] = -0.436332*Lf;
-    vars_upperbound[i] = 0.436332*Lf;
+    vars_lowerbound[i] = -0.436332;
+    vars_upperbound[i] = 0.436332;
   }
 
   // Acceleration/decceleration upper and lower limits.

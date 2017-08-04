@@ -96,7 +96,12 @@ int main() {
 
           double v = v_mph * 0.44704;
           const double Lf=2.67;
+          const double dt=0.10;
 
+          px += v * cos(psi) * dt;
+          py += v * sin(psi) * dt;
+          psi -= v * delta / Lf * dt;
+          v += acceleration * dt;
 
           for (int i=0; i<ptsx.size(); i++) {
 
@@ -126,10 +131,12 @@ int main() {
           //auto coeffs = polyfit(ptsx, ptsy, 3);
 
           double cte = polyeval(coeffs, 0.0); // y=0
-          double epsi = -atan(coeffs[1]);     // x=0
+          double epsi = psi - atan(coeffs[1] + 2 * px * coeffs[2] + 3 * coeffs[3] *pow(px,2));// x=0
+          //double epsi = - atan(coeffs[1]);// x=0
+
 
           //const double Lf=2.67;
-          const double dt=0.15;
+
 
           // Kinematic model is used to predict vehicle state at the actual
           // moment of control (current time + delay dt)
@@ -212,7 +219,7 @@ int main() {
           //
           // NOTE: REMEMBER TO SET THIS TO 100 MILLISECONDS BEFORE
           // SUBMITTING.
-          //this_thread::sleep_for(chrono::milliseconds(0));
+          this_thread::sleep_for(chrono::milliseconds(100));
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
         }
       } else {
