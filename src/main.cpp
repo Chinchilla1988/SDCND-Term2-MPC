@@ -95,13 +95,15 @@ int main() {
           double acceleration = j[1]["throttle"];
 
           double v = v_mph * 0.44704;
-          const double Lf=2.67;
-          const double dt=0.10;
 
-          px += v * cos(psi) * dt;
-          py += v * sin(psi) * dt;
-          psi -= v * delta / Lf * dt;
-          v += acceleration * dt;
+          const double Lf=2.67;
+          const double dt=0.1;
+
+          //px += v * cos(psi) * dt;
+          //py += v * sin(psi) * dt;
+          //psi -= v * delta / Lf * dt;
+          //v += acceleration * dt;
+          // transform global coordinates to local car coordinates!
 
           for (int i=0; i<ptsx.size(); i++) {
 
@@ -126,13 +128,13 @@ int main() {
          //   ptsx_(i) = ptsx[i];
          //   ptsy_(i) = ptsy[i];
          // }
-
+          px=0;
           auto coeffs = polyfit(ptsx_transform, ptsy_transform, 3);
           //auto coeffs = polyfit(ptsx, ptsy, 3);
 
-          double cte = polyeval(coeffs, 0.0); // y=0
-          double epsi = psi - atan(coeffs[1] + 2 * px * coeffs[2] + 3 * coeffs[3] *pow(px,2));// x=0
-          //double epsi = - atan(coeffs[1]);// x=0
+          double cte = polyeval(coeffs, 0); // y=0
+          //double epsi = psi - atan(coeffs[1] + 2 * px * coeffs[2] + 3 * coeffs[3] *pow(px,2));// x=0
+          double epsi = - atan(coeffs[1]);// x=0
 
 
           //const double Lf=2.67;
@@ -193,7 +195,7 @@ int main() {
           //double Lf=2.67;
 
           json msgJson;
-          msgJson["steering_angle"] = -vars[0] / (deg2rad(25)*Lf);
+          msgJson["steering_angle"] = -vars[0]/ (deg2rad(25));
           msgJson["throttle"] = vars[1];
 
           msgJson["next_x"] = next_x_vals;
